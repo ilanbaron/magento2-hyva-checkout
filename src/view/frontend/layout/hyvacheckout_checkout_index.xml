@@ -11,14 +11,28 @@
 <!--
     <css src="Hyva_Checkout::css/styles.css" defer="defer"/>
 -->
+        <css src="Payone_Core::css/payolution.css"/>
+        <css src="Payone_Core::css/creditcard.css"/>
+        <css src="Payone_Core::css/klarna.css"/>
+        <css src="Payone_Core::css/payone.css"/>
     </head>
     <body>
         <referenceContainer name="content">
             <block name="checkout.container" template="Hyva_Checkout::react-container.phtml">
                 <arguments>
                     <argument name="locale_provider" xsi:type="object">Hyva\Checkout\ViewModel\LocaleProvider</argument>
+                    <argument name="checkout_config_provider" xsi:type="object">Hyva\Checkout\ViewModel\CheckoutConfigProvider</argument>
                 </arguments>
             </block>
+            <block class="Payone\Core\Block\ClientApi"
+                   name="payone_client_api"
+                   template="Payone_Core::client_api.phtml" />
+<!--            <block class="Payone\Core\Block\RedirectReturn"-->
+<!--                   name="payone_redirect_return"-->
+<!--                   template="Payone_Core::redirect_return.phtml" />-->
+            <block class="Payone\Core\Block\RatepayDeviceFingerprint"
+                   name="payone_ratepay_device_fingerprint"
+                   template="Payone_Core::ratepay_device_fingerprint.phtml" />
         </referenceContainer>
         <referenceContainer name="before.body.end">
             <block name="checkout.scripts" template="Hyva_Checkout::react-script.phtml" after="-"/>

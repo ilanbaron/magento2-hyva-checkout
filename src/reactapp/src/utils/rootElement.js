@@ -12,6 +12,10 @@ const RootElement = {
     return RootElement.elem.dataset.language;
   },
 
+  getPaymentConfig() {
+    return JSON.parse(RootElement.elem.dataset.payment || {});
+  },
+
   getFilePath() {
     return RootElement.elem.dataset.static_file_path || '';
   },

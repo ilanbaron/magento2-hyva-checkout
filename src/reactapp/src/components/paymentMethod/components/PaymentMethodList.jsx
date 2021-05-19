@@ -10,7 +10,7 @@ import { _objToArray } from '../../../utils';
 import { PAYMENT_METHOD_FORM } from '../../../config';
 import { __ } from '../../../i18n';
 
-function PaymentMethodList() {
+function PaymentMethodList({ methodRenderers }) {
   const { fields, submitHandler } = usePaymentMethodFormContext();
   const {
     values,
@@ -34,17 +34,28 @@ function PaymentMethodList() {
   return (
     <div className="py-4">
       <ul>
-        {_objToArray(methodList).map(method => (
-          <li key={method.code} className="flex">
-            <RadioInput
-              label={method.title}
-              name="paymentMethod"
-              value={method.code}
-              onChange={handlePaymentMethodSelection}
-              checked={method.code === selectedPaymentMethod.code}
-            />
-          </li>
-        ))}
+        {_objToArray(methodList).map(method => {
+          const MethodRenderer = methodRenderers[method.code];
+          return (
+            <li key={method.code} className="flex">
+              {MethodRenderer ? (
+                <MethodRenderer
+                  method={method}
+                  selected={selectedPaymentMethod}
+                  actions={{ change: handlePaymentMethodSelection }}
+                />
+              ) : (
+                <RadioInput
+                  label={method.title}
+                  name="paymentMethod"
+                  value={method.code}
+                  onChange={handlePaymentMethodSelection}
+                  checked={method.code === selectedPaymentMethod.code}
+                />
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       <div className="flex items-center justify-center mt-2">
