@@ -9,15 +9,17 @@ import usePaymentMethodFormContext from '../hooks/usePaymentMethodFormContext';
 import { _objToArray } from '../../../utils';
 import { PAYMENT_METHOD_FORM } from '../../../config';
 import { __ } from '../../../i18n';
+import usePayone from '../../payone/hooks/usePayone';
 
 function PaymentMethodList({ methodRenderers }) {
-  const { fields, submitHandler } = usePaymentMethodFormContext();
+  const { fields } = usePaymentMethodFormContext();
   const {
     values,
     touched,
     setFieldValue,
     setFieldTouched,
   } = useFormikContext();
+  const { handleCreditcardCheck } = usePayone({ values });
   const { methodList } = usePaymentMethodCartContext();
   const buttonDisable = !_get(touched, fields.code);
   const selectedPaymentMethod = _get(values, PAYMENT_METHOD_FORM);
@@ -60,7 +62,7 @@ function PaymentMethodList({ methodRenderers }) {
 
       <div className="flex items-center justify-center mt-2">
         <Button
-          click={() => submitHandler(values)}
+          click={handleCreditcardCheck}
           variant="success"
           disable={buttonDisable}
         >
