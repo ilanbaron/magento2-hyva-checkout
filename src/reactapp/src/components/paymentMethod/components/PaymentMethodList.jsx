@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _get from 'lodash.get';
 import { useFormikContext } from 'formik';
 
@@ -72,5 +72,9 @@ function PaymentMethodList({ methodRenderers }) {
     </div>
   );
 }
+
+PaymentMethodList.propTypes = {
+  methodRenderers: Component,
+};
 
 export default PaymentMethodList;
