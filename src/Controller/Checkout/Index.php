@@ -3,56 +3,27 @@ declare(strict_types=1);
 
 namespace Hyva\Checkout\Controller\Checkout;
 
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Checkout\Controller\Action;
-use Magento\Checkout\Helper\Data;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Controller\Onepage;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Controller\ResultInterface;
 
-class Index extends Action implements HttpGetActionInterface
+class Index extends Onepage implements HttpGetActionInterface
 {
-    /**
-     * @var Data
-     */
-    private $checkoutHelper;
-
-    public function __construct(
-        Context $context,
-        Session $customerSession,
-        CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement,
-        Data $checkoutHelper
-    ) {
-        $this->checkoutHelper = $checkoutHelper;
-        parent::__construct(
-            $context,
-            $customerSession,
-            $customerRepository,
-            $accountManagement
-        );
-    }
-
     /**
      * Checkout page
      *
-     * @return ResultInterface
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute(): ResultInterface
+    public function execute()
     {
-        //phpcs:ignore MEQP2.Classes.ObjectManager.ObjectManagerFound
-        $checkoutHelper = $this->checkoutHelper;
+        /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+        $checkoutHelper = $this->_objectManager->get(\Magento\Checkout\Helper\Data::class);
         if (!$checkoutHelper->canOnepageCheckout()) {
             $this->messageManager->addErrorMessage(__('One-page checkout is turned off.'));
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 
-        $quote = $checkoutHelper->getQuote();
-        if (!$quote->hasItems() || !$quote->validateMinimumAmount()) {
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 
@@ -61,12 +32,35 @@ class Index extends Action implements HttpGetActionInterface
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 
-        $this->_customerSession->regenerateId();
-
-        /** @var Page $resultPage */
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
-
+        // generate session ID only if connection is unsecure according to issues in session_regenerate_id function.
+        // @see http://php.net/manual/en/function.session-regenerate-id.php
+        if (!$this->isSecureRequest()) {
+            $this->_customerSession->regenerateId();
+        }
+        $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->setCartWasUpdated(false);
+        $this->getOnepage()->initCheckout();
+        $resultPage = $this->resultPageFactory->create();
+//        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
         return $resultPage;
+    }
+
+    /**
+     * Checks if current request uses SSL and referer also is secure.
+     *
+     * @return bool
+     */
+    private function isSecureRequest(): bool
+    {
+        $request = $this->getRequest();
+
+        $referrer = $request->getHeader('referer');
+        $secure = false;
+
+        if ($referrer) {
+            $scheme = parse_url($referrer, PHP_URL_SCHEME);
+            $secure = $scheme === 'https';
+        }
+
+        return $secure && $request->isSecure();
     }
 }

@@ -18,7 +18,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block name="checkout.container" template="Hyva_Checkout::react-container.phtml">
+            <block name="checkout.container" cacheable="false" template="Hyva_Checkout::react-container.phtml">
                 <arguments>
                     <argument name="locale_provider" xsi:type="object">Hyva\Checkout\ViewModel\LocaleProvider</argument>
                     <argument name="checkout_config_provider" xsi:type="object">Hyva\Checkout\ViewModel\CheckoutConfigProvider</argument>

@@ -1,16 +1,20 @@
+import { useFormikContext } from 'formik';
 import { func, shape, string } from 'prop-types';
 import React, { useEffect } from 'react';
 
 import RadioInput from '../../../common/Form/RadioInput';
-import SelectInput from '../../../common/Form/SelectInput';
-import TextInput from '../../../common/Form/TextInput';
+import CCForm from './CCForm';
+import CCIframe from './CCIframe';
+import SavedCards from './SavedCards';
 import paymentConfig from '../../utility/paymentConfig';
+import usePaymentMethodFormContext from '../../../paymentMethod/hooks/usePaymentMethodFormContext';
 
-const cardTypeOptions = paymentConfig.availableCardTypes.map(
-  ({ id, title }) => ({ value: id, label: title })
-);
 function CreditCard({ method, selected, actions }) {
+  const savedData = paymentConfig.useSavedData();
   const isSelected = method.code === selected.code;
+  const { setFieldValue } = useFormikContext();
+  const { fields } = usePaymentMethodFormContext();
+  const selectedCardField = fields.selectedCard;
 
   // initializing payone iframe
   useEffect(() => {
@@ -23,27 +27,18 @@ function CreditCard({ method, selected, actions }) {
     }
   }, [isSelected]);
 
-  const iframeHtml = (
-    <>
-      <div>
-        <label className="md:text-sm">Credit Card Number</label>
-        <div id="cardpan" className="inputIframe"></div>
-      </div>
+  // if saved cards available for customer, then should show card list in the content
+  useEffect(() => {
+    if (isSelected && savedData) {
+      const defaultSavedCard = paymentConfig.savedPaymentData.find(
+        payment => Number(payment.is_default) === 1
+      );
 
-      <div>
-        <label className="md:text-sm">Expiration Date</label>
-        <div className="flex justify-between">
-          <div className="w-2/5" id="cardexpiremonth"></div>
-          <div className="w-2/5" id="cardexpireyear"></div>
-        </div>
-      </div>
-
-      <div>
-        <label className="md:text-sm">Card Verification Number</label>
-        <div id="cardcvc2" className="inputIframe"></div>
-      </div>
-    </>
-  );
+      if (defaultSavedCard) {
+        setFieldValue(selectedCardField, Number(defaultSavedCard.id));
+      }
+    }
+  }, [savedData, isSelected, setFieldValue, selectedCardField]);
 
   if (!isSelected) {
     return (
@@ -55,8 +50,27 @@ function CreditCard({ method, selected, actions }) {
           onChange={actions.change}
           checked={isSelected}
         />
-        <div className="hidden">{iframeHtml}</div>
+        <div className="hidden">
+          <CCIframe />
+        </div>
       </>
+    );
+  }
+
+  if (savedData) {
+    return (
+      <div className="w-full">
+        <RadioInput
+          label={method.title}
+          name="paymentMethod"
+          value={method.code}
+          onChange={actions.change}
+          checked={isSelected}
+        />
+        <div className="mt-4 ml-4">
+          <SavedCards />
+        </div>
+      </div>
     );
   }
 
@@ -71,17 +85,7 @@ function CreditCard({ method, selected, actions }) {
           checked={isSelected}
         />
       </div>
-      <div className="w-full">
-        <SelectInput name="payment.cc_type" options={cardTypeOptions} />
-        <TextInput label="First Name" name="payment.cc_firstname" />
-        <TextInput label="Last Name" name="payment.cc_lastname" />
-        <TextInput
-          type="number"
-          label="First Name"
-          name="payment.cc_firstname"
-        />
-        {iframeHtml}
-      </div>
+      <CCForm />
     </div>
   );
 }

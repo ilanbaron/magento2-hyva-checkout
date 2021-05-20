@@ -13,6 +13,8 @@ import { __ } from '../../../i18n';
 
 const initialValues = {
   code: '',
+  selectedCard: '',
+  additionalData: {},
 };
 
 const requiredMessage = __('Required');

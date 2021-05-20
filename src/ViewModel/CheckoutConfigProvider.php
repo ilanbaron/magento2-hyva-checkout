@@ -37,16 +37,7 @@ class CheckoutConfigProvider implements ArgumentInterface
 
     public function getConfig(): string
     {
-        return $this->serializer->serialize($this->payOneConfigProvider->getConfig());
-//        $checkoutConfig = $this->compositeConfigProvider->getConfig();
-//        return $this->serializer->serialize($checkoutConfig['payment']);
-
-
-//        try {
-//            $checkoutConfig = $this->compositeConfigProvider->getConfig();
-//            return $this->serializer->serialize($checkoutConfig['payment']);
-//        } catch (\Exception $exception) {
-//            return $this->serializer->serialize([]);
-//        }
+        $checkoutConfig = $this->compositeConfigProvider->getConfig();
+        return $this->serializer->serialize($checkoutConfig['payment']);
     }
 }
