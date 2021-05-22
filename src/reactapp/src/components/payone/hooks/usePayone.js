@@ -65,7 +65,20 @@ export default function usePayone({ values }) {
       }
       setSuccessMessage(__('Credit card added successfully'));
       // TODO Display the CC instead the form?
-      submitHandler(values);
+      const paymentMethodWithAttr = {
+        payment_method: {
+          ...values.payment_method,
+          additionalData: {
+            cardexpiredate: response.cardexpiredate,
+            cardtype: response.cardtype,
+            firstname: values.payment.cc_firstname,
+            lastname: values.payment.cc_lastname,
+            pseudocardpan: response.pseudocardpan,
+            truncatedcardpan: response.truncatedcardpan,
+          },
+        },
+      };
+      submitHandler({ ...values, ...paymentMethodWithAttr });
     } else if (response.status === 'INVALID') {
       setErrorMessage(__(response.errormessage));
     } else if (response.status === 'ERROR') {
