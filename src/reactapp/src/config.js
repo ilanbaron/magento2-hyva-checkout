@@ -46,6 +46,11 @@ const magentoDataSources = {
       timestamp: 'timeStored',
     },
   },
+  sectionStorage: {
+    sectionInvalidate: {
+      storageKey: 'mage-cache-storage-section-invalidation',
+    },
+  },
 };
 
 const activeSource = magentoDataSources.mageCacheStorage; // or `magentoDataSources.m2BrowserPersistence` for PWA;
@@ -53,6 +58,7 @@ const activeSource = magentoDataSources.mageCacheStorage; // or `magentoDataSour
 export const config = {
   storageSource: activeSource,
   hyvaStorageSource: magentoDataSources.hyvaCheckoutCacheStorage,
+  sectionStorage: magentoDataSources.sectionStorage,
   cartId: getConfigFromLocalStorage(activeSource.cartId),
   signInToken: getConfigFromLocalStorage(activeSource.token),
   baseUrl: process.env.REACT_APP_BASE_URL || '',

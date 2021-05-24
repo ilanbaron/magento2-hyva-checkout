@@ -40,7 +40,7 @@ class Index extends Onepage implements HttpGetActionInterface
         $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->setCartWasUpdated(false);
         $this->getOnepage()->initCheckout();
         $resultPage = $this->resultPageFactory->create();
-//        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
+        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
         return $resultPage;
     }
 

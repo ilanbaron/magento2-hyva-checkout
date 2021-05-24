@@ -10,7 +10,7 @@ import CartItemsForm from './items';
 import ShippingMethodsForm from './shippingMethod';
 import PaymentMethod from './paymentMethod';
 import Totals from './totals';
-import PlaceOrder from './PlaceOrder';
+import PlaceOrder from './placeOrder';
 import CheckoutFormWrapper from './CheckoutFormWrapper';
 import useCartContext from '../hook/useCartContext';
 import useAppContext from '../hook/useAppContext';
@@ -48,9 +48,7 @@ function CheckoutForm() {
       <Message />
       <div
         className={`${
-          pageLoader
-            ? 'hidden'
-            : 'flex flex-col flex-wrap mx-12 my-6 md:flex-row'
+          pageLoader ? 'hidden' : 'flex flex-col mx-12 my-6 md:flex-row'
         }`}
       >
         <div className="md:w-1/4">

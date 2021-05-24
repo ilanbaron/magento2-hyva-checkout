@@ -1,5 +1,10 @@
 import _get from 'lodash.get';
 
 export default function modifyPlaceOrder(result) {
-  return _get(result, 'data.placeOrder.order', {});
+  const orderNumber = _get(result, 'data.placeOrder.order', {});
+
+  return {
+    orderNumber,
+    redirectUrl: '/checkout/onepage/success',
+  };
 }

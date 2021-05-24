@@ -1,27 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import _get from 'lodash.get';
 import { useFormikContext } from 'formik';
 
-import Button from '../../common/Button';
 import RadioInput from '../../common/Form/RadioInput';
 import usePaymentMethodCartContext from '../hooks/usePaymentMethodCartContext';
 import usePaymentMethodFormContext from '../hooks/usePaymentMethodFormContext';
 import { _objToArray } from '../../../utils';
 import { PAYMENT_METHOD_FORM } from '../../../config';
-import { __ } from '../../../i18n';
-import usePayone from '../../payone/hooks/usePayone';
 
 function PaymentMethodList({ methodRenderers }) {
   const { fields } = usePaymentMethodFormContext();
   const {
     values,
-    touched,
     setFieldValue,
     setFieldTouched,
   } = useFormikContext();
-  const { handleCreditcardCheck } = usePayone({ values });
   const { methodList } = usePaymentMethodCartContext();
-  const buttonDisable = !_get(touched, fields.code);
   const selectedPaymentMethod = _get(values, PAYMENT_METHOD_FORM);
 
   const handlePaymentMethodSelection = event => {
@@ -59,22 +53,8 @@ function PaymentMethodList({ methodRenderers }) {
           );
         })}
       </ul>
-
-      <div className="flex items-center justify-center mt-2">
-        <Button
-          click={handleCreditcardCheck}
-          variant="success"
-          disable={buttonDisable}
-        >
-          {__('Update')}
-        </Button>
-      </div>
     </div>
   );
 }
-
-PaymentMethodList.propTypes = {
-  methodRenderers: Component,
-};
 
 export default PaymentMethodList;

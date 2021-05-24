@@ -13,7 +13,7 @@ import { __ } from '../../../i18n';
 
 const initialValues = {
   code: '',
-  selectedCard: '',
+  selectedCard: 'new',
   additionalData: {},
 };
 

@@ -19,6 +19,10 @@ const RootElement = {
   getFilePath() {
     return RootElement.elem.dataset.static_file_path || '';
   },
+
+  getFormKey() {
+    return RootElement.elem.dataset.formkey;
+  }
 };
 
 export default RootElement;

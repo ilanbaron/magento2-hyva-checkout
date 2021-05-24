@@ -6,7 +6,6 @@ namespace Hyva\Checkout\ViewModel;
 use Magento\Checkout\Model\CompositeConfigProvider;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Payone\Core\Model\ConfigProvider;
 
 class CheckoutConfigProvider implements ArgumentInterface
 {
@@ -21,23 +20,25 @@ class CheckoutConfigProvider implements ArgumentInterface
     private $serializer;
 
     /**
-     * @var \Payone\Core\Model\ConfigProvider
+     * CheckoutConfigProvider constructor.
+     *
+     * @param  \Magento\Framework\Serialize\SerializerInterface  $serializer
+     * @param  \Magento\Checkout\Model\CompositeConfigProvider  $compositeConfigProvider
      */
-    private $payOneConfigProvider;
-
     public function __construct(
         SerializerInterface $serializer,
-        CompositeConfigProvider $compositeConfigProvider,
-        ConfigProvider $payOneConfigProvider
+        CompositeConfigProvider $compositeConfigProvider
     ) {
         $this->serializer = $serializer;
         $this->compositeConfigProvider = $compositeConfigProvider;
-        $this->payOneConfigProvider = $payOneConfigProvider;
     }
 
     public function getConfig(): string
     {
         $checkoutConfig = $this->compositeConfigProvider->getConfig();
+        $storeCode = $checkoutConfig['storeCode'];
+        $checkoutConfig['payment']['restUrlPrefix'] = "/rest/$storeCode/V1/";
+
         return $this->serializer->serialize($checkoutConfig['payment']);
     }
 }

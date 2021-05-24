@@ -1,22 +1,47 @@
 import React from 'react';
+import _get from 'lodash.get';
+import { useFormikContext } from 'formik';
 
 import Checkbox from '../../../common/Form/Checkbox';
+import { PAYMENT_METHOD_FORM } from '../../../../config';
 import paymentConfig from '../../utility/paymentConfig';
 
-function CCIframe() {
+let { availableCardTypes } = paymentConfig;
+const { isAutoCardtypeDetectionEnabled } = paymentConfig;
+
+function getCardTypeImageUrl(imageId) {
+  return `https://cdn.pay1.de/cc/${imageId}/s/default.png`;
+}
+
+const saveDataField = `${PAYMENT_METHOD_FORM}.additional_data.saveData`;
+
+function CCIframe({ detectedCardType }) {
+  const { values } = useFormikContext();
+  const saveData = !!_get(values, saveDataField);
+  let detectedCard;
+
+  if (isAutoCardtypeDetectionEnabled) {
+    detectedCard = paymentConfig.availableCardTypes.find(
+      cardType => cardType.id.toUpperCase() === detectedCardType
+    );
+
+    if (detectedCard) {
+      availableCardTypes = [detectedCard];
+    }
+  }
+
   return (
     <>
       <div className="mt-2">
         <div className="flex justify-between mb-2">
           <label className="md:text-sm">Credit Card Number</label>
           <div className="flex space-x-2">
-            {paymentConfig.isAutoCardtypeDetectionEnabled &&
-              paymentConfig.availableCardTypes.map(cardType => (
+            {isAutoCardtypeDetectionEnabled &&
+              availableCardTypes.map(cardType => (
                 <img
                   key={cardType.id}
                   alt={cardType.title}
-                  id={`payone_creditcard_cc_icon_${cardType.id.toLowerCase()}`}
-                  src={`https://cdn.pay1.de/cc/${cardType.id.toLowerCase()}/s/default.png`}
+                  src={getCardTypeImageUrl(cardType.id.toLowerCase())}
                   className="w-auto h-3"
                 />
               ))}
@@ -43,7 +68,8 @@ function CCIframe() {
       {paymentConfig.isSaveDataEnabled() && (
         <Checkbox
           label="Save the payment data for future use."
-          name="payment.save_payment_data"
+          name={`${PAYMENT_METHOD_FORM}.additional_data.saveData`}
+          isChecked={saveData}
         />
       )}
     </>

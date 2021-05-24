@@ -1,13 +1,21 @@
 import React from 'react';
 import _get from 'lodash.get';
-
 import { useFormikContext } from 'formik';
+
 import RadioInput from '../../../common/Form/RadioInput';
 import CCForm from './CCForm';
 import paymentConfig from '../../utility/paymentConfig';
 import usePaymentMethodFormContext from '../../../paymentMethod/hooks/usePaymentMethodFormContext';
 
-function SavedCards() {
+function formatCardExpireDate(expireDate) {
+  return `${expireDate.substring(2, 4)}/${expireDate.substring(0, 2)}`;
+}
+
+function getCardImage(cardType) {
+  return `https://cdn.pay1.de/cc/${cardType.toLowerCase()}/s/default.png`;
+}
+
+function SavedCards({ detectedCardType }) {
   const { values } = useFormikContext();
   const { fields } = usePaymentMethodFormContext();
   const selectedCard = _get(values, fields.selectedCard);
@@ -23,15 +31,15 @@ function SavedCards() {
             <td className="pl-2">
               <RadioInput
                 name={fields.selectedCard}
-                checked={Number(selectedCard) === Number(payment.id)}
-                value={Number(payment.id)}
+                checked={selectedCard === payment.payment_data.cardpan}
+                value={payment.payment_data.cardpan}
               />
             </td>
             <td>
               <img
                 className="w-auto h-3"
                 alt={payment.payment_data.masked}
-                src={`https://cdn.pay1.de/cc/${payment.payment_data.cardtype.toLowerCase()}/s/default.png`}
+                src={getCardImage(payment.payment_data.cardtype)}
               />
             </td>
             <td>
@@ -39,13 +47,8 @@ function SavedCards() {
                 payment.payment_data.masked.length - 4
               )}`}
             </td>
-            <td>{`${payment.payment_data.firstname} ${payment.payment_data.lastname}`}</td>
-            <td>
-              {`${payment.payment_data.cardexpiredate.substring(
-                2,
-                4
-              )}/${payment.payment_data.cardexpiredate.substring(0, 2)}`}
-            </td>
+            <td>{payment.payment_data.cardholder}</td>
+            <td>{formatCardExpireDate(payment.payment_data.cardexpiredate)}</td>
           </tr>
         ))}
 
@@ -65,7 +68,7 @@ function SavedCards() {
                   selectedCard !== 'new' ? 'hidden' : ''
                 }`}
               >
-                <CCForm />
+                <CCForm detectedCardType={detectedCardType} />
               </div>
             </>
           </td>

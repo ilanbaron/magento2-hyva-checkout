@@ -1,3 +1,6 @@
+import _get from 'lodash.get';
+import { PAYMENT_METHOD_FORM } from '../../../config';
+
 import LocalStorage from '../../../utils/localStorage';
 import RootElement from '../../../utils/rootElement';
 
@@ -32,7 +35,6 @@ const paymentConfig = {
         ...fieldConfig.fields.cardexpireyear,
         iframe,
       },
-      ccMinValidity,
     },
     defaultStyle: {
       ...fieldConfig.defaultStyle,
@@ -41,15 +43,25 @@ const paymentConfig = {
       select: selectStyles,
     },
   },
+  ccMinValidity,
   availableCardTypes,
   savedPaymentData,
   isAutoCardtypeDetectionEnabled: !!fieldConfig.autoCardtypeDetection,
   checkCvc,
-  isSaveDataEnabled: () =>
-    saveCCDataEnabled && !!LocalStorage.getCustomerToken(),
 
-  useSavedData: () =>
-    paymentConfig.isSaveDataEnabled() && !!savedPaymentData.length,
+  isSaveDataEnabled() {
+    return saveCCDataEnabled && !!LocalStorage.getCustomerToken();
+  },
+
+  useSavedData() {
+    return paymentConfig.isSaveDataEnabled() && !!savedPaymentData.length;
+  },
+
+  isSavedPaymentDataUsed(values) {
+    const selectedCard = _get(values, `${PAYMENT_METHOD_FORM}.selectedCard`);
+
+    return paymentConfig.useSavedData() && selectedCard !== 'new';
+  },
 };
 
 export default paymentConfig;

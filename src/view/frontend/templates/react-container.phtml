@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template;
     id="react-checkout"
     data-language="<?= $localeProvider->getLocaleCode() ?>"
     data-static_file_path="<?= $block->getViewFileUrl('Hyva_Checkout/js') ?>"
+    data-formkey="<?= $block->getChildBlock('react-checkout-formkey')->getFormKey() ?>"
     data-payment="<?= $escaper->escapeHtmlAttr($configProvider->getConfig())  ?>"
 >
     <div class="container flex flex-col px-6 mb-4 md:flex-row">
