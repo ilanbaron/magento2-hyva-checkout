@@ -10,7 +10,7 @@ function Header({ children, extra, ...props }) {
       role="button"
       tabIndex={0}
     >
-      <span className="text-base font-bold text-indigo">{children}</span>
+      <span className="uppercase font-bold text-lg">{children}</span>
       {extra}
     </header>
   );

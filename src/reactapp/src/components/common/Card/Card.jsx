@@ -4,8 +4,8 @@ import { node, string } from 'prop-types';
 function Card({ children, bg, classes }) {
   return (
     <div
-      className={`card w-full px-4 py-4 ${
-        bg === 'dark' ? 'bg-container-darker' : ''
+      className={`card w-full h-full p-4 border border-gray-lighter ${
+        bg === 'dark' ? 'bg-gray-lightest' : 'bg-white'
       } ${classes}`}
     >
       {children}

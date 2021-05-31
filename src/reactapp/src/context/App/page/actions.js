@@ -15,9 +15,17 @@ export function setMessageAction(dispatch, message) {
 }
 
 export function setSuccessMessageAction(dispatch, message) {
+  if (typeof window.dispatchMessages !== 'undefined') {
+    window.dispatchMessages([{ type: 'success', text: message }], 5000);
+    return;
+  }
   setMessageAction(dispatch, { type: 'success', message });
 }
 
 export function setErrroMessageAction(dispatch, message) {
+  if (typeof window.dispatchMessages !== 'undefined') {
+    window.dispatchMessages([{ type: 'error', text: message }], 5000);
+    return;
+  }
   setMessageAction(dispatch, { type: 'error', message });
 }

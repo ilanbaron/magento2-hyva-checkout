@@ -22,7 +22,7 @@ function PlaceOrder() {
   return (
     <div className="flex items-center justify-center h-24">
       <Button
-        variant="warning"
+        variant="primary"
         big
         disable={!isValid}
         click={() => submitHandler(values)}

@@ -48,41 +48,34 @@ function CheckoutForm() {
       <Message />
       <div
         className={`${
-          pageLoader
-            ? 'hidden'
-            : 'flex flex-col flex-wrap mx-12 my-6 md:flex-row'
+          pageLoader ? 'hidden' : 'flex flex-col flex-wrap my-6 md:flex-row'
         }`}
       >
-        <div className="md:w-1/4">
-          <div className="mr-1">
-            <FormStep className="space-y-2">
-              <Login />
-              <AddressWrapper>
-                <BillingAddress />
-                <ShippingAddress />
-              </AddressWrapper>
-            </FormStep>
+        <div className="w-full mb-4">
+          <Login />
+        </div>
+
+        <div className="w-full mb-4">
+          <div className="grid md:grid-cols-2 md:gap-2">
+            <AddressWrapper>
+              <ShippingAddress />
+              <BillingAddress />
+            </AddressWrapper>
           </div>
         </div>
 
-        <div className="md:w-1/3">
-          <div className="mx-1 space-y-2">
-            <FormStep>
-              <ShippingMethodsForm />
-            </FormStep>
-
-            <FormStep>
-              <PaymentMethod />
-            </FormStep>
-          </div>
+        <div className="w-full mb-4">
+          <CartItemsForm />
         </div>
 
-        <div className="flex-grow">
-          <div className="ml-1 space-y-2">
-            <CartItemsForm />
-            <Totals />
-            <PlaceOrder />
-          </div>
+        <div className="w-full mb-4 space-y-2">
+          <ShippingMethodsForm />
+          <PaymentMethod />
+        </div>
+
+        <div className="w-full mb-4 space-y-2">
+          <Totals />
+          <PlaceOrder />
         </div>
       </div>
       {pageLoader && <PageLoader />}

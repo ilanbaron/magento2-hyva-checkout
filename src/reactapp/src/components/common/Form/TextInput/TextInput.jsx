@@ -22,23 +22,14 @@ function TextInput({
   const hasTouched = !!_get(meta, 'touched', false);
 
   return (
-    <div className="mt-2 form-control">
+    <div className="my-3 form-control">
       <div className="flex items-center justify-between">
-        <label htmlFor={inputId} className="md:text-sm">
+        <label htmlFor={inputId} className="label">
           {label}
-          {required && <sup> *</sup>}
+          {required && <span className="text-red">*</span>}
         </label>
-        <div
-          id={`${inputId}-feedback`}
-          aria-live="polite"
-          className={`feedback text-sm md:text-xs text-right ${
-            hasError ? 'text-red-500' : 'text-green-500'
-          }`}
-        >
-          <ErrorMessage name={name}>
-            {msg => msg.replace('%1', label)}
-          </ErrorMessage>
-          {!hasError && hasTouched && '✓'}
+        <div className="text-xs text-gray-light" id={`${inputId}-help`} tabIndex="-1">
+          {helpText}
         </div>
       </div>
       <Field
@@ -46,11 +37,19 @@ function TextInput({
         name={name}
         id={inputId}
         placeholder={placeholder}
-        className={`form-input ${className} ${width || 'w-full'}`}
+        className={`form-input ${className} ${hasError ? 'invalid' : ''} ${
+          !hasError && hasTouched ? 'valid' : ''
+        } ${width || 'w-full'}`}
         aria-describedby={`${inputId}-feedback ${inputId}-help`}
       />
-      <div className="text-xs" id={`${inputId}-help`} tabIndex="-1">
-        {helpText}
+      <div
+          id={`${inputId}-feedback`}
+          aria-live="polite"
+          className="text-sm text-gray-light italic"
+      >
+        <ErrorMessage name={name}>
+          {msg => msg.replace('%1', label)}
+        </ErrorMessage>
       </div>
     </div>
   );
