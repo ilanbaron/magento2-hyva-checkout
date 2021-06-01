@@ -66,7 +66,7 @@ function ShippingMethodList() {
       <div className="flex items-center justify-center mt-2">
         <Button
           click={() => submitHandler(values)}
-          variant="success"
+          variant="secondary"
           disable={buttonDisable}
         >
           {__('Update')}

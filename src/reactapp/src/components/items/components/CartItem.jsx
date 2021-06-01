@@ -33,7 +33,7 @@ function CartItem({ item }) {
       <div className="w-20 mt-4">{item.rowTotal}</div>
       <div className="w-20 mt-4">
         <Button
-          variant="success"
+          variant="secondary"
           disable={!isQtyFieldTouched}
           click={itemUpdateHandler}
         >
