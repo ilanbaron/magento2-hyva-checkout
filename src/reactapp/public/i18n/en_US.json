@@ -22,7 +22,7 @@
   "First name":"Firstname",
   "I will sign-in and checkout":"I will sign-in and checkout",
   "Item":"Item",
-  "Last name":"Lastname",
+  "Last name":"Lastname"
   "My billing & shipping address are same":"My billing & shipping address are same",
   "No cart items available":"No cart items available",
   "No payment methods available at the moment":"No payment methods available at the moment",
@@ -60,5 +60,9 @@
   "Street":"Street",
   "Total":"Total",
   "Update":"Update",
-  "{} zipcode: {}":"{} zipcode: {}"
+  "{} zipcode: {}":"{} zipcode: {}",
+  "Payment method not available": "Payment method not available",
+  "Shipping method not available": "Shipping method not available",
+  "Please complete all the required data": "Please complete all the required data"
+  "Login failed.": "Login failed."
 }

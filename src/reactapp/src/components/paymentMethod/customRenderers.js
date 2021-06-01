@@ -12,6 +12,12 @@
  * }
  *
  */
-const customRenderers = {};
+import CreditCard from '../payone/components/creditCard/CreditCard';
+import PaypalExpress from '../paypalExpress/components/PaypalExpress';
+
+const customRenderers = {
+  paypal_express: PaypalExpress,
+  CreditCard,
+};
 
 export default customRenderers;
