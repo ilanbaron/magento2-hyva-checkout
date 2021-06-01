@@ -27,7 +27,7 @@ function CartItem({ item }) {
         <span>{`(${item.productSku})`}</span>
       </div>
       <div className="w-24">
-        <TextInput width="w-10" className="w-10 h-10" name={qtyField} />
+        <TextInput width="w-10" type="number" className="w-10 h-10" name={qtyField} />
       </div>
       <div className="w-20 mt-4">{item.price}</div>
       <div className="w-20 mt-4">{item.rowTotal}</div>
