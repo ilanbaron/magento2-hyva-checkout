@@ -8,7 +8,6 @@ import useAppContext from '../../../../../hook/useAppContext';
 import CartContext from '../../../../../context/Cart/CartContext';
 import LocalStorage from '../../../../../utils/localStorage';
 import {
-  config,
   GUEST_EMAIL_FORM,
   PAYMENT_METHOD_FORM,
 } from '../../../../../config';
@@ -189,7 +188,7 @@ export default function usePayoneCC() {
         }
       }
     },
-    [setRestPaymentMethod, setPageLoader, cartId]
+    [setRestPaymentMethod, setPageLoader, cartId, setErrorMessage]
   );
 
   const processPayoneResponseCCHosted = useCallback(
