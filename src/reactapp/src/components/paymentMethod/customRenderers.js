@@ -17,7 +17,7 @@ import PaypalExpress from '../paypalExpress/components/PaypalExpress';
 
 const customRenderers = {
   paypal_express: PaypalExpress,
-  CreditCard,
+  payone_creditcard: CreditCard,
 };
 
 export default customRenderers;

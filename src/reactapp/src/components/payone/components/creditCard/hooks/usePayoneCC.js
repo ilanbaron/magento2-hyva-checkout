@@ -143,6 +143,9 @@ export default function usePayoneCC() {
             cardtype,
             cardexpiredate,
           },
+          extension_attributes: {
+            agreement_ids: ['1', '2'], // TODO: Hardcoded the agreements, should be the real one
+          },
         },
       };
 
@@ -169,9 +172,21 @@ export default function usePayoneCC() {
 
       setPageLoader(false);
 
-      if (result && result.redirectUrl) {
-        LocalStorage.clearCheckoutStorage();
-        window.location.replace(`${config.baseUrl}${result.redirectUrl}`);
+      if (result) {
+        if (result.status === 'REDIRECT') {
+          LocalStorage.clearCheckoutStorage();
+          window.location.replace(result.url);
+        }
+
+        if (result.status === 'APPROVED') {
+          LocalStorage.clearCheckoutStorage();
+          // eslint-disable-next-line no-console
+          console.log('SUCCESS', result.orderId); // TODO: Redirect to confirmation page
+        }
+
+        if (result.message) {
+          setErrorMessage(__(result.message));
+        }
       }
     },
     [setRestPaymentMethod, setPageLoader, cartId]
