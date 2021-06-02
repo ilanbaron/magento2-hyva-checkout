@@ -35,6 +35,7 @@ function LoginForm() {
       <div className="py-2">
         <TextInput
           label={__('E-mail')}
+          type="email"
           name={fields.email}
           placeholder="john.doe@gmail.com"
           required
@@ -53,7 +54,6 @@ function LoginForm() {
         )}
 
         {customerWantsToSignin && (
-          <div>
             <TextInput
               label={__('Password')}
               type="password"
@@ -61,13 +61,12 @@ function LoginForm() {
               placeholder={__('Password')}
               required
             />
-          </div>
         )}
       </div>
       <div className="flex items-center justify-center">
         <Button
           click={submitButtonHandler}
-          variant="success"
+          variant="primary"
           disable={!isFormValid}
         >
           {customerWantsToSignin ? __('Sign In') : __('Update')}

@@ -8,7 +8,9 @@
       * When using Hyvä Themes, don't generate a separate style-sheet!
       */
 -->
+<!--
     <css src="Hyva_Checkout::css/styles.css" defer="defer"/>
+-->
     <css src="Payone_Core::css/payolution.css"/>
     <css src="Payone_Core::css/creditcard.css"/>
     <css src="Payone_Core::css/klarna.css"/>

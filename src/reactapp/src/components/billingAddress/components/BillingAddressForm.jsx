@@ -38,6 +38,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('Company')}
           name={fields.company}
+          type="text"
           placeholder={__('Company')}
           required
           onFocus={handleFocus}
@@ -45,6 +46,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('First name')}
           name={fields.firstname}
+          type="text"
           placeholder={__('First name')}
           required
           onFocus={handleFocus}
@@ -52,6 +54,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('Last name')}
           name={fields.lastname}
+          type="text"
           placeholder={__('Last name')}
           required
           onFocus={handleFocus}
@@ -59,6 +62,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('Street')}
           name={`${fields.street}[0]`}
+          type="text"
           placeholder={__('Street')}
           required
           onFocus={handleFocus}
@@ -66,6 +70,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('Postal Code')}
           name={fields.zipcode}
+          type="text"
           placeholder="12345"
           required
           onFocus={handleFocus}
@@ -73,6 +78,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('City')}
           name={fields.city}
+          type="text"
           placeholder={__('City')}
           required
           onFocus={handleFocus}
@@ -89,6 +95,7 @@ function BillingAddressForm() {
           <TextInput
             label={__('State')}
             name={fields.region}
+            type="text"
             placeholder={__('State')}
             required
             onFocus={handleFocus}
@@ -104,6 +111,7 @@ function BillingAddressForm() {
         <TextInput
           label={__('Phone')}
           name={fields.phone}
+          type="tel"
           placeholder="+32 000 000 000"
           required
           onFocus={handleFocus}

@@ -36,7 +36,7 @@ function CancelButton() {
   }
 
   return (
-    <Button click={clickHandler} variant="warning">
+    <Button click={clickHandler} variant="secondary">
       {__('Cancel')}
     </Button>
   );
