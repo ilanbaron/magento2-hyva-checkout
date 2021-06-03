@@ -16,7 +16,6 @@ import {
   getCustomerCartIdAction,
   getGuestCartInfoAction,
   mergeCartsAction,
-  setCustomerDefaultAddressToCartAction,
 } from './cart/actions';
 import {
   addCartShippingAddressAction,
@@ -40,7 +39,6 @@ const dispatchMapper = {
   placeOrder: placeOrderAction,
   updateCartItem: updateCartItemAction,
   getCartInfoAfterMerge: getCartInfoAfterMergeAction,
-  setCustomerDefaultAddressToCart: setCustomerDefaultAddressToCartAction,
   setCustomerAddressAsBillingAddress: setCustomerAddrAsBillingAddrAction,
   setCustomerAddressAsShippingAddress: setCustomerAddrAsShippingAddrAction,
   getCustomerCartId: getCustomerCartIdAction,
