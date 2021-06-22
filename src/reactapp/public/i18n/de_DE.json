@@ -60,7 +60,5 @@
     "Cart Subtotal": "Warenkorb Zwischensumme",
     "Shipping": "Versand",
     "Order Total": "Auftragssumme",
-    "Payment method not available": "Zahlungsmethode nicht verfügbar",
-    "Shipping method not available": "Versandart nicht verfügbar",
-    "Please complete all the required data": "Bitte vervollständigen Sie alle erforderlichen Daten"
+    "Checkout Agreements": "Kassenvereinbarungen"
 }
