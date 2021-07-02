@@ -1,38 +1,37 @@
 import _get from 'lodash.get';
-import { useFormikContext } from 'formik';
 
-import useShippingAddressAppContext from './useShippingAddressAppContext';
-import useShippingAddressCartContext from './useShippingAddressCartContext';
 import { __ } from '../../../i18n';
 import { CART_SHIPPING_ADDRESS } from '../utility';
+import { BILLING_ADDR_FORM } from '../../../config';
 import LocalStorage from '../../../utils/localStorage';
-import { BILLING_ADDR_FORM, SHIPPING_ADDR_FORM } from '../../../config';
+import useShippingAddressAppContext from './useShippingAddressAppContext';
 import { _cleanObjByKeys, _emptyFunc, _makePromise } from '../../../utils';
+import useShippingAddressCartContext from './useShippingAddressCartContext';
 import { billingAddressFormInitValues } from '../../billingAddress/utility';
 
-const isSameAsShippingField = `${BILLING_ADDR_FORM}.isSameAsShipping`;
-
 export default function useSaveAddressAction(shippingAddressFormContext) {
-  const { values, setFieldValue } = useFormikContext();
   const {
     isLoggedIn,
     setPageLoader,
-    setSuccessMessage,
     setErrorMessage,
+    setSuccessMessage,
     updateCustomerAddress,
   } = useShippingAddressAppContext();
   const {
     editMode,
-    selectedAddress,
     regionData,
+    setFieldValue,
+    selectedAddress,
     setFormToViewMode,
-    customerAddressSelected,
     setSelectedAddress,
+    customerAddressSelected,
     setCustomerAddressSelected,
+    shippingValues: shippingAddressToSave,
+    isBillingAddressSameAsShipping: isBillingSame,
   } = shippingAddressFormContext;
   const {
-    addCartShippingAddress,
     setCartBillingAddress,
+    addCartShippingAddress,
     setCustomerAddressAsBillingAddress,
     setCustomerAddressAsShippingAddress,
   } = useShippingAddressCartContext();
@@ -41,8 +40,6 @@ export default function useSaveAddressAction(shippingAddressFormContext) {
     try {
       setPageLoader(true);
 
-      const isBillingSame = _get(values, isSameAsShippingField);
-      const shippingAddressToSave = _get(values, SHIPPING_ADDR_FORM);
       let updateBillingAddress = _emptyFunc();
       let updateShippingAddress = _makePromise(
         addCartShippingAddress,
@@ -99,7 +96,6 @@ export default function useSaveAddressAction(shippingAddressFormContext) {
   return async addressId => {
     try {
       let customerAddressNeeded = false;
-      const isBillingSame = _get(values, isSameAsShippingField);
       const hasCustomerAddr = addressId && addressId !== CART_SHIPPING_ADDRESS;
       let updateCustomerAddrPromise = _emptyFunc();
       const updateCartAddressPromise = _makePromise(
@@ -112,21 +108,19 @@ export default function useSaveAddressAction(shippingAddressFormContext) {
         updateCustomerAddrPromise = _makePromise(
           updateCustomerAddress,
           selectedAddress,
-          _get(values, SHIPPING_ADDR_FORM, {}),
+          shippingAddressToSave,
           regionData
         );
       }
 
       if (hasCustomerAddr) {
         LocalStorage.saveCustomerAddressInfo(addressId, isBillingSame);
-        setSelectedAddress(addressId);
         setCustomerAddressSelected(true);
       } else if (customerAddressNeeded) {
         LocalStorage.saveCustomerAddressInfo(selectedAddress, isBillingSame);
         setCustomerAddressSelected(true);
       } else {
         LocalStorage.saveCustomerAddressInfo('', isBillingSame);
-        setSelectedAddress(CART_SHIPPING_ADDRESS);
         setCustomerAddressSelected(false);
       }
 
@@ -136,6 +130,7 @@ export default function useSaveAddressAction(shippingAddressFormContext) {
         updateCartAddressPromise(),
       ]);
       setFormToViewMode(false);
+      setSelectedAddress(hasCustomerAddr ? addressId : CART_SHIPPING_ADDRESS);
       setSuccessMessage(__('Shipping address updated successfully'));
       setPageLoader(false);
     } catch (error) {

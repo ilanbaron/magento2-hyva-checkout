@@ -1,38 +1,43 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
-import { useFormikContext } from 'formik';
+import _get from 'lodash.get';
 
-import { AddressCard } from '../../address';
-import useCustomerAddressSwitchAction from '../hooks/useCustomerAddressSwitchAction';
-import useShippingAddressAppContext from '../hooks/useShippingAddressAppContext';
-import useShippingAddressCartContext from '../hooks/useShippingAddressCartContext';
-import useShippingAddressFormikContext from '../hooks/useShippingAddressFormikContext';
 import { _toString } from '../../../utils';
+import { AddressCard } from '../../address';
 import { prepareShippingAddressCardList } from '../utility';
+import useShippingAddressAppContext from '../hooks/useShippingAddressAppContext';
+import useCustomerAddressSwitchAction from '../hooks/useCustomerAddressSwitchAction';
+import useShippingAddressFormikContext from '../hooks/useShippingAddressFormikContext';
 
 function ShippingAddressCardList() {
-  const { values } = useFormikContext();
-  const { customerAddressList } = useShippingAddressAppContext();
-  const { cartShippingAddress } = useShippingAddressCartContext();
+  const { customerAddressList, isLoggedIn } = useShippingAddressAppContext();
   const performCustomerAddressSwitching = useCustomerAddressSwitchAction();
   const {
     regionData,
+    shippingValues,
     selectedAddress,
-    customerAddressSelected,
-    setSelectedAddress,
-    setFormToEditMode,
     setBackupAddress,
+    setFormToEditMode,
+    setSelectedAddress,
+    customerAddressSelected,
   } = useShippingAddressFormikContext();
   const addressList = prepareShippingAddressCardList(
-    values,
-    customerAddressList,
+    shippingValues,
     regionData,
+    customerAddressList,
     customerAddressSelected
   );
 
-  const performAddressEdit = () => {
-    setBackupAddress({ ...cartShippingAddress });
+  const performAddressEdit = addressId => {
+    const customerAddress = _get(customerAddressList, addressId);
+    const addressToBackup = isLoggedIn ? customerAddress : shippingValues;
+
+    if (isLoggedIn && !customerAddress) {
+      return;
+    }
+
+    setBackupAddress({ ...addressToBackup });
     setFormToEditMode();
   };
 
@@ -43,9 +48,9 @@ function ShippingAddressCardList() {
       return;
     }
 
-    setSelectedAddress(_toString(addressId));
-
     await performCustomerAddressSwitching(addressId);
+
+    setSelectedAddress(_toString(addressId));
   };
 
   return (
@@ -53,8 +58,8 @@ function ShippingAddressCardList() {
       {addressList.map(address => (
         <AddressCard
           key={address.id}
-          inputName="shippingAddressChooser"
           address={address}
+          inputName="shippingAddressChooser"
           isSelected={selectedAddress === address.id}
           actions={{ performAddressSwitching, performAddressEdit }}
         />

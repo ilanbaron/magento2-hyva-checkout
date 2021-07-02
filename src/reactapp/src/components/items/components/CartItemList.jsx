@@ -1,8 +1,8 @@
 import React from 'react';
 
 import CartItem from './CartItem';
-import useItemsFormContext from '../hooks/useItemsFormContext';
 import { __ } from '../../../i18n';
+import useItemsFormContext from '../hooks/useItemsFormContext';
 
 function CartItemList() {
   const { cartItems } = useItemsFormContext();
@@ -10,21 +10,24 @@ function CartItemList() {
   return (
     <div className="py-4">
       <div className="">
-        <table className="table w-full">
+        <table className="table w-full text-left">
           <thead className="hidden text-left md:table-header-group">
             <tr>
               <th>{__('Item')}</th>
               <th>{__('Qty')}</th>
               <th>{__('Price')}</th>
-              <th>{__('Total')}</th>
-              <th>{__('Actions')}</th>
+              <th className="hidden xl:table-cell">{__('Total')}</th>
+              <th>
+                <span className="sr-only">{__('Actions')}</span>
+                &nbsp;
+              </th>
             </tr>
           </thead>
           <tbody>
             {cartItems.map((cartItem, index) => (
               <CartItem
-                key={cartItem.id}
                 item={cartItem}
+                key={cartItem.id}
                 isLastItem={index === cartItems.length - 1}
               />
             ))}

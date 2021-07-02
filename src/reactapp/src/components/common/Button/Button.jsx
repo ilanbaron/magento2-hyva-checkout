@@ -1,40 +1,33 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
-import { bool, func, node, oneOf } from 'prop-types';
+import { bool, func, node, oneOf, string } from 'prop-types';
 
-function Button({ children, click, variant, disable, big }) {
+function Button({ children, click, variant, disable, size }) {
   return (
-    <div className="py-2">
-      <button
-        className={`px-2 py-1 text-white uppercase max-w-max ${variant ===
-          'success' && 'bg-green-600'} ${variant === 'warning' &&
-          'bg-yellow-500'} ${disable && 'opacity-50'} ${
-          big
-            ? 'h-12 font-bold text-lg shadow-md hover:shadow-lg'
-            : 'text-sm shadow-sm hover:shadow-md'
-        }`}
-        type="button"
-        onClick={click}
-        disabled={disable}
-      >
-        {children}
-      </button>
-    </div>
+    <button
+      className={`btn btn-${variant || 'primary'}  btn-size-${size ||
+        'md'} ${disable && 'opacity-50 pointer-events-none'}`}
+      type="button"
+      onClick={click}
+      disabled={disable}
+    >
+      {children}
+    </button>
   );
 }
 
 Button.propTypes = {
-  children: node.isRequired,
   click: func,
+  size: string,
   disable: bool,
-  big: bool,
-  variant: oneOf(['success', 'warning']),
+  children: node.isRequired,
+  variant: oneOf(['success', 'warning', 'primary', 'secondary']),
 };
 
 Button.defaultProps = {
-  disable: false,
+  size: 'md',
   variant: '',
-  big: false,
+  disable: false,
   click: () => {},
 };
 

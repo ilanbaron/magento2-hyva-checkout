@@ -1,28 +1,27 @@
-import createEmptyCart from './cart/createEmptyCart';
-import fetchGuestCart from './cart/fetchGuestCart';
+import { isError } from './cart/utility';
 import mergeCarts from './cart/mergeCarts';
 import placeOrder from './cart/placeOrder';
-import restSetGuestPaymentMethod from './cart/restSetGuestPaymentMethod';
-import restSetMyPaymentMethod from './cart/restSetMyPaymentMethod';
-import setBillingAddress from './cart/setBillingAddress';
-import setCustomerAddressOnCartBilling from './cart/setCustomerAddressOnBilling';
-import setCustomerAddrOnShippingAddr from './cart/setCustomerAddrOnShippingAddr';
-import setEmailOnGuestCart from './cart/setEmailOnGuestCart';
-import setPaymentMethod from './cart/setPaymentMethod';
-import setShippingAddress from './cart/setShippingAddress';
-import setShippingMethod from './cart/setShippingMethod';
-import updateCartItems from './cart/updateCartItems';
-import { isError } from './cart/utility';
-import fetchCountryList from './countries/fetchCountryList';
-import fetchCountryStateList from './countries/fetchCountryStateList';
 import ajaxLogin from './customer/ajaxLogin';
-import fetchCustomerAddressList from './customer/fetchCustomerAddresses';
+import fetchGuestCart from './cart/fetchGuestCart';
+import createEmptyCart from './cart/createEmptyCart';
+import generateToken from './customer/generateToken';
+import updateCartItems from './cart/updateCartItems';
+import setPaymentMethod from './cart/setPaymentMethod';
+import setBillingAddress from './cart/setBillingAddress';
+import setShippingMethod from './cart/setShippingMethod';
+import setShippingAddress from './cart/setShippingAddress';
+import fetchCountryList from './countries/fetchCountryList';
 import fetchCustomerCart from './customer/fetchCustomerCart';
 import fetchCustomerInfo from './customer/fetchCustomerInfo';
-import generateToken from './customer/generateToken';
+import setEmailOnGuestCart from './cart/setEmailOnGuestCart';
+import restSetMyPaymentMethod from './cart/restSetMyPaymentMethod';
 import updateCustomerAddress from './customer/updateCustomerAddress';
-import setPaymentMethodPaypalExpress from './paypalExpress/setPaymentMethod';
-import createCustomerToken from './paypalExpress/createCustomerToken';
+import fetchCountryStateList from './countries/fetchCountryStateList';
+import getCheckoutAgreements from './storeConfig/getCheckoutAgreements';
+import fetchCustomerAddressList from './customer/fetchCustomerAddresses';
+import restSetGuestPaymentMethod from './cart/restSetGuestPaymentMethod';
+import setCustomerAddressOnCartBilling from './cart/setCustomerAddressOnBilling';
+import setCustomerAddrOnShippingAddr from './cart/setCustomerAddrOnShippingAddr';
 
 export const isResponseError = isError;
 
@@ -70,6 +69,4 @@ export const restSetGuestPaymentMethodRequest = restSetGuestPaymentMethod;
 
 export const restSetMyPaymentMethodRequest = restSetMyPaymentMethod;
 
-export const setPaymentMethodPaypalExpressRequest = setPaymentMethodPaypalExpress;
-
-export const createCustomerTokenRequest = createCustomerToken;
+export const getCheckoutAgreementsRequest = getCheckoutAgreements;

@@ -2,34 +2,48 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import _get from 'lodash.get';
-import { ErrorMessage, Field, useField } from 'formik';
 import { bool, string } from 'prop-types';
+import { ErrorMessage, Field } from 'formik';
+
+import { _replace } from '../../../../utils';
+import { formikDataShape } from '../../../../utils/propTypes';
 
 function TextInput({
   id,
   name,
+  type,
   label,
+  width,
   helpText,
   required,
-  placeholder,
+  isHidden,
   className,
-  width,
-  type,
+  formikData,
+  placeholder,
   ...rest
 }) {
+  const {
+    setFieldValue,
+    formSectionId,
+    setFieldTouched,
+    formSectionErrors,
+    formSectionTouched,
+  } = formikData;
   const inputId = id || name;
-  const [, meta] = useField(name) || [];
-  const hasFieldError = !!_get(meta, 'error', false);
-  const hasFieldTouched = !!_get(meta, 'touched', false);
+  const relativeFieldName = _replace(name, formSectionId).replace('.', '');
+  const hasFieldError = !!_get(formSectionErrors, relativeFieldName);
+  const hasFieldTouched = !!_get(formSectionTouched, relativeFieldName);
   const hasError = hasFieldError && hasFieldTouched;
 
   return (
-    <div className="mt-2 form-control">
+    <div className={`mt-2 form-control ${isHidden ? 'hidden' : ''}`}>
       <div className="flex items-center justify-between">
-        <label htmlFor={inputId} className="md:text-sm">
-          {label}
-          {required && <sup> *</sup>}
-        </label>
+        {label && (
+          <label htmlFor={inputId} className="md:text-sm">
+            {label}
+            {required && <sup> *</sup>}
+          </label>
+        )}
         <div
           className={`feedback text-sm md:text-xs text-right ${
             hasError ? 'text-red-500' : 'text-green-500'
@@ -42,11 +56,16 @@ function TextInput({
       </div>
       <Field
         {...rest}
-        type={type || 'text'}
         name={name}
         id={inputId}
+        type={type || 'text'}
         placeholder={placeholder}
-        className={`form-input ${
+        onChange={event => {
+          const newValue = event.target.value;
+          setFieldTouched(name, newValue);
+          setFieldValue(name, newValue);
+        }}
+        className={`form-input max-w-md ${
           hasError ? 'border-dashed border-red-500' : ''
         } ${className} ${width || 'w-full'}`}
       />
@@ -57,14 +76,16 @@ function TextInput({
 
 TextInput.propTypes = {
   id: string,
-  name: string.isRequired,
-  label: string,
-  helpText: string,
-  placeholder: string,
-  required: bool,
-  width: string,
-  className: string,
   type: string,
+  label: string,
+  width: string,
+  required: bool,
+  isHidden: bool,
+  helpText: string,
+  className: string,
+  placeholder: string,
+  name: string.isRequired,
+  formikData: formikDataShape.isRequired,
 };
 
 TextInput.defaultProps = {
@@ -72,10 +93,11 @@ TextInput.defaultProps = {
   label: '',
   width: '',
   helpText: '',
+  type: 'text',
+  className: '',
   required: false,
   placeholder: '',
-  className: '',
-  type: 'text',
+  isHidden: false,
 };
 
 export default TextInput;
